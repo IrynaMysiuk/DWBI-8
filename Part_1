@@ -1,0 +1,45 @@
+SELECT maker,type FROM dbo.product ORDER BY maker ASC
+SELECT * FROM dbo.classes
+SELECT model,ram,screen,price FROM dbo.laptop WHERE price>1000 ORDER BY price DESC, ram ASC
+SELECT * FROM dbo.printer WHERE color='y' ORDER BY price DESC
+SELECT model,speed,hd,cd,price FROM dbo.pc WHERE (cd='12x') OR (cd='24x') AND price<600 ORDER BY speed DESC
+SELECT name,class FROM dbo.ships ORDER BY name ASC
+SELECT price,speed FROM dbo.pc WHERE speed>=500 AND price>=800 ORDER BY price DESC
+SELECT type,price FROM dbo.printer WHERE price>=300 AND NOT type='Matrix'
+SELECT model,speed,price,hd FROM dbo.pc WHERE price BETWEEN 400 AND 600 ORDER BY hd ASC
+SELECT model,speed,hd,price,screen FROM dbo.laptop WHERE screen>=12 ORDER BY price DESC
+SELECT model,type,price FROM dbo.printer WHERE price>=300 ORDER BY type DESC
+SELECT ram,model,price,screen FROM dbo.laptop WHERE ram=64 ORDER BY screen ASC
+SELECT model,ram,price,hd FROM dbo.pc WHERE ram>64 ORDER BY hd ASC
+SELECT model,speed,price,hd FROM dbo.pc WHERE speed BETWEEN 500 AND 750 ORDER BY hd DESC
+SELECT date,out FROM dbo.outcome_o WHERE out>2000 ORDER BY date DESC
+SELECT inc FROM dbo.income_o WHERE inc BETWEEN 5000 AND 10000 ORDER BY inc ASC
+SELECT inc FROM dbo.income ORDER BY inc ASC
+SELECT out FROM dbo.outcome ORDER BY out ASC
+SELECT type,country,class FROM dbo.classes WHERE country='Japan' ORDER BY type DESC
+SELECT name,launched FROM dbo.ships WHERE launched BETWEEN 1920 AND 1942 ORDER BY launched DESC
+SELECT ship,battle,result FROM dbo.outcomes WHERE battle='Guadalcanal'AND NOT result='sunk' ORDER BY ship DESC
+SELECT ship,battle,result FROM dbo.outcomes WHERE result='sunk' ORDER BY ship DESC
+SELECT class,displacement,type FROM dbo.classes WHERE displacement>40000 ORDER BY type ASC
+SELECT trip_no,town_from,town_to,time_out FROM dbo.trip WHERE  town_to='London' OR town_from='London' ORDER BY time_out ASC
+SELECT trip_no,plane,town_from,town_to,time_out FROM dbo.trip WHERE plane='TU-134' ORDER BY time_out DESC
+SELECT trip_no,plane,town_from,town_to FROM dbo.trip WHERE NOT plane='IL-86' ORDER BY plane ASC
+SELECT trip_no,plane,town_from,town_to FROM dbo.trip WHERE NOT town_from='Rostov' OR NOT town_to='Rostov' ORDER BY plane ASC
+SELECT model FROM dbo.pc WHERE model LIKE '%11%'
+SELECT * FROM dbo.outcome WHERE MONTH(date)=03
+SELECT * FROM dbo.outcome_o WHERE DAY(date)=14
+SELECT name FROM dbo.ships WHERE name LIKE 'W%n'
+SELECT name FROM dbo.ships WHERE name LIKE '%e%e'
+SELECT name,launched FROM dbo.ships WHERE name NOT LIKE'%a'
+SELECT name FROM dbo.ships WHERE SUBSTRING(name, CHARINDEX(' ', name)+1, LEN(name)-CHARINDEX(' ', name)) NOT LIKE '%[c]'
+SELECT town_from,trip_no,time_out FROM dbo.trip WHERE time_out = (SELECT DATEPART(HOUR,'1900-01-01 14:30:00.000'))
+SELECT date,place FROM dbo.pass_in_trip WHERE place LIKE '1%'
+SELECT date,place FROM dbo.pass_in_trip WHERE place LIKE '%c'
+SELECT name FROM dbo.passenger WHERE SUBSTRING(name, CHARINDEX(' ', name)+1, LEN(name)-CHARINDEX(' ', name)) LIKE '[C]%'
+SELECT name FROM dbo.passenger WHERE SUBSTRING(name, CHARINDEX(' ', name)+1, LEN(name)-CHARINDEX(' ', name))NOT LIKE '[J]%'
+SELECT CONCAT('Середня ціна=', AVG(price)) FROM dbo.laptop
+SELECT CONCAT('code=',code),CONCAT('model=',model),CONCAT('speed=',speed), CONCAT('ram=',ram),CONCAT('hd=',hd),CONCAT('cd=',cd),CONCAT('price=',price)  FROM dbo.pc
+SELECT  dateadd(d, datediff(d,0, date), 0) FROM dbo.income
+SELECT ship,battle,REPLACE(REPLACE(REPLACE(result,'sunk','потоплено'),'damaged','поранені'),'OK','наявні') FROM dbo.outcomes
+SELECT CONCAT('РЯД:',SUBSTRING(place,1,1)), CONCAT('МІСЦЕ:',SUBSTRING(place,2,2)) FROM dbo.pass_in_trip
+SELECT CONCAT(CONCAT('from ',town_from),' to ',town_to) FROM dbo.trip
