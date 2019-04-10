@@ -1,0 +1,20 @@
+SELECT dbo.product.maker,dbo.product.type,dbo.pc.speed,dbo.pc.hd FROM dbo.pc INNER JOIN dbo.product ON dbo.product.model=dbo.pc.model WHERE hd<8
+SELECT dbo.product.maker,dbo.pc.speed FROM dbo.pc INNER JOIN dbo.product ON dbo.product.model=dbo.pc.model WHERE speed>600
+SELECT dbo.product.maker,dbo.laptop.speed FROM dbo.laptop INNER JOIN dbo.product ON dbo.product.model=dbo.laptop.model WHERE speed<500
+SELECT l1.model,l2.model,l1.ram,l1.hd FROM dbo.laptop l1, dbo.laptop l2 WHERE l1.model<>l2.model AND l1.ram <> l2.ram AND l1.hd = l2.hd
+SELECT s.country, s.type FROM dbo.classes s, dbo.classes s1 WHERE s.country<>s1.country AND s.type<>s1.type
+SELECT dbo.pc.model, dbo.product.maker FROM dbo.product INNER JOIN dbo.pc ON dbo.product.model=dbo.pc.model WHERE dbo.pc.price<600 
+SELECT dbo.printer.model, dbo.product.maker FROM dbo.product INNER JOIN dbo.printer ON dbo.product.model=dbo.printer.model WHERE dbo.printer.price>300
+SELECT pr.maker,pr.model,pc.price FROM dbo.pc pc INNER JOIN dbo.product pr ON pc.model=pr.model
+SELECT pr.maker,pr.model,pc.price FROM dbo.pc pc, dbo.product pr 
+SELECT pr.maker,pr.type,pr.model,l.speed FROM dbo.product pr INNER JOIN dbo.laptop l ON l.model=pr.model WHERE l.speed>600
+SELECT sh.name, cl.class, cl.displacement FROM dbo.ships sh INNER JOIN  dbo.classes cl ON cl.class=sh.class
+SELECT b.name, b.date FROM dbo.battles b INNER JOIN dbo.outcomes ou ON b.name=ou.battle WHERE ou.result<>'sunk'
+SELECT sh.name,cl.country FROM dbo.ships sh INNER JOIN dbo.classes cl ON sh.class=cl.class
+SELECT  tr.plane,co.name FROM dbo.trip tr INNER JOIN dbo.company co ON tr.id_comp=co.id_comp WHERE tr.plane='Boeing'
+SELECT pa.name,p.date FROM dbo.pass_in_trip p INNER JOIN dbo.passenger pa ON p.id_psg=pa.id_psg 
+SELECT dbo.pc.model,dbo.pc.speed,dbo.pc.hd FROM dbo.pc INNER JOIN dbo.product ON dbo.pc.model=dbo.product.model  WHERE (dbo.pc.hd='10' OR dbo.pc.hd='20') AND dbo.product.maker='A' ORDER BY speed
+SELECT * FROM dbo.product pr PIVOT(COUNT(pr.model) FOR pr.type IN (pc,laptop,printer)) as machine
+SELECT 'average price' AS 'avg_', AVG([11]) AS '11', AVG([12]) AS '12', AVG([14]) AS '13', AVG([15])AS '14'  FROM dbo.laptop pr PIVOT(AVG(pr.price) FOR pr.screen IN ([11],[12],[14],[15])) as scr
+SELECT * FROM dbo.laptop l  CROSS APPLY (SELECT pr.maker FROM dbo.product pr WHERE pr.model=l.model) A
+SELECT * FROM dbo.laptop l  CROSS APPLY (SELECT MAX(pr.maker) as 'max' FROM dbo.product pr WHERE pr.model=l.model) m
