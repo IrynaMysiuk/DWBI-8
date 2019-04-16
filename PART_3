@@ -1,0 +1,95 @@
+SELECT * FROM [geography]
+go
+
+;WITH first_answer(region_id,name) AS
+(
+SELECT region_id,name FROM geography WHERE region_id>20
+)
+SELECT region_id,name FROM geography WHERE region_id>10
+go
+
+;WITH second_answer(region_id,place_id,name,placeId) AS
+(
+SELECT region_id,id,name,place_id=-1
+FROM geography
+UNION ALL
+SELECT g.region_id,g.id,g.name,f.placeId+1
+FROM geography g INNER JOIN second_answer f
+ON g.region_id=f.place_id
+)
+SELECT region_id,place_id,name,place_id FROM second_answer WHERE place_id>=0
+go
+
+;WITH third_answer(region_id,place_id,name,PlaceLevel) AS
+(
+SELECT region_id,id,name,PlaceLevel=1
+FROM geography
+Where region_id='1'--region_id=4
+UNION ALL
+SELECT g.region_id,g.id,g.name,f.PlaceLevel
+FROM geography g INNER JOIN third_answer f
+ON g.region_id=f.place_id
+)
+SELECT region_id,place_id,name,PlaceLevel FROM third_answer WHERE PlaceLevel>=0 AND region_id=1
+go
+
+;WITH first_level_regions(region_id,place_id,name,PlaceLevel) AS
+(
+SELECT region_id,id,name,PlaceLevel=-1
+FROM geography
+Where name='Ivano-Frankivsk'--region_id=4
+UNION ALL
+SELECT g.region_id,g.id,g.name,f.PlaceLevel+1
+FROM geography g INNER JOIN first_level_regions f
+ON g.region_id=f.place_id
+)
+SELECT region_id,place_id,name,PlaceLevel FROM first_level_regions WHERE PlaceLevel>=0
+go
+
+DECLARE @n INT = 0;
+WHILE @n < 10000
+BEGIN SET @n = @n +1	
+print @n	
+END;
+GO
+
+DECLARE @n1 INT = 0;
+WHILE @n1 < 100000
+BEGIN SET @n1 = @n1 +1	
+print @n1	
+END;
+GO
+
+
+;WITH rs(D,name) as
+(SELECT cast('20190101'AS DATE )AS D,DATENAME(WEEKDAY,'20190101')
+UNION ALL
+SELECT DATEADD(DAY,1,D),DATENAME(WEEKDAY,DATEADD(DAY,1,D)) FROM rs WHERE D<'20191231'),
+
+rs1 AS(
+SELECT D,name FROM rs
+WHERE name in('Saturday','Sunday')
+)
+SELECT COUNT(*) FROM rs1
+OPTION (maxrecursion 366)
+go
+
+
+
+
+SELECT [maker],
+(SELECT
+CASE WHEN COUNT(pc.[model])=0 THEN 'no'
+ELSE CONCAT ('yes (', COUNT(pc.[model]),')')
+END) [pc]
+FROM [product] p LEFT JOIN [pc] ON p.[model]=pc.[model] GROUP BY [maker]
+GO
+
+SELECT onse.point,onse.date,
+CASE when onse.out>more.sum_out THEN 'once a day'
+WHEN onse.out=more.sum_out THEN 'both'
+ELSE 'more than once a day' END AS result
+FROM
+(SELECT point,date,SUM(out) AS sum_out FROM outcome GROUP BY date,point) more
+FULL JOIN outcome_o onse ON more.date=onse.date AND more.point=onse.point
+GO
