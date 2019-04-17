@@ -74,6 +74,12 @@ SELECT COUNT(*) FROM rs1
 OPTION (maxrecursion 366)
 go
 
+SELECT maker FROM dbo.product WHERE type IN ('PC')
+SELECT * FROM dbo.product WHERE type='pc' AND maker= ALL (SELECT maker FROM dbo.product)
+SELECT * FROM dbo.product WHERE type = 'pc' AND maker = ANY (SELECT maker FROM dbo.product )
+SELECT maker,type FROM dbo.product WHERE type IN ('PC', 'Laptop')
+SELECT * FROM dbo.product WHERE type=('pc') AND type=('laptop') AND maker= ALL (SELECT maker FROM dbo.product)
+SELECT * FROM dbo.product WHERE type = ('pc') OR type=('laptop') AND maker = ANY (SELECT maker FROM dbo.product )
 
 
 
